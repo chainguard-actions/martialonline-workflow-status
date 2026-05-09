@@ -1,0 +1,7 @@
+{
+  "owner": "martialonline",
+  "name": "workflow-status",
+  "visibility": "internal",
+  "description": "Trigger events like notifications or alerts using the workflow status",
+  "block_publish": false
+}
