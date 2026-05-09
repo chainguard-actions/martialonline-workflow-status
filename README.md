@@ -1,14 +1,94 @@
-# martialonline/workflow-status
+![Tests](https://github.com/martialonline/workflow-status/workflows/Tests/badge.svg)
 
-Trigger events like notifications or alerts using the workflow status
+## Workflow Status Action
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/martialonline/workflow-status](https://github.com/martialonline/workflow-status).
+Use this action to trigger events such as notifications or alerts at the end of your workflow. This makes it possible to send catch-all notifications.
 
-## Versions
+### Outputs
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v3 | [`v3`](https://github.com/chainguard-actions/workflow-status/tree/v3) | — |
+* `status` - Returns either `success`, `cancelled` or `failure`.
+
+### Required permissions
+```yaml
+permissions:
+  actions: read
+```
+
+### Example usage
+
+Simply add a job to the end of your workflow and list the last job as dependency using `needs`. Then add a step within that job including a condition to trigger an event like a Slack notification or similar.
+
+```yaml
+...
+  notification:
+    name: Notify
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: always()
+    steps:
+      - uses: martialonline/workflow-status@v3
+        id: check
+      - run: echo "Workflow failed"
+        if: steps.check.outputs.status == 'failure'
+      - run: echo "Workflow was cancelled"
+        if: steps.check.outputs.status == 'cancelled'
+      - run: echo "Workflow was successful"
+        if: steps.check.outputs.status == 'success'
+```
+
+### Full Example (Slack Notification)
+
+This is a full example using the Workflow Status Action to trigger a Slack notification at the end of the run. The condition is optional, which in this case triggers a Slack nofication for either `success`, `failure` or `cancelled` status.
+
+```yaml
+name: Slack Example
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  actions: read
+
+jobs:
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Unit Tests
+        run: go test ./...
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Build
+        run: docker build -t example:latest .
+
+  notification:
+    name: Notify
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: always()
+    steps:
+      - uses: martialonline/workflow-status@v3
+        id: check
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ steps.check.outputs.status }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+```
+
+### License
+
+The Dockerfile and associated scripts and documentation in this project are released under the [MIT](license).
 
 ## Privacy
 
