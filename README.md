@@ -8,6 +8,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
+| v2 | [`v2`](https://github.com/chainguard-actions/workflow-status/tree/v2) | — |
 | v3 | [`v3`](https://github.com/chainguard-actions/workflow-status/tree/v3) | — |
 | v4 | [`v4`](https://github.com/chainguard-actions/workflow-status/tree/v4) | — |
 | v4.1 | [`v4.1`](https://github.com/chainguard-actions/workflow-status/tree/v4.1) | — |
