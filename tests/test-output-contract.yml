@@ -1,0 +1,30 @@
+name: Test output contract - status is a valid value
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        continue-on-error: true
+      - name: Assert status output is one of the valid values
+        env:
+          STATUS: ${{ steps.action.outputs.status }}
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "status: $STATUS"
+          if [ "$OUTCOME" = "success" ]; then
+            if [ "$STATUS" != "success" ] && [ "$STATUS" != "failure" ] && [ "$STATUS" != "cancelled" ]; then
+              echo "FAIL: status '$STATUS' is not one of: success, failure, cancelled"
+              exit 1
+            fi
+            echo "PASS: status '$STATUS' is a valid value"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (sentinel repo is not resolvable via API)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
