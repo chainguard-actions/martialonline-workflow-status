@@ -8,7 +8,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
-| v2 | [`v2`](https://github.com/chainguard-actions/martialonline-workflow-status/tree/v2) | — |
+| v2 | [`v2`](https://github.com/chainguard-actions/martialonline-workflow-status/tree/v2) | [`3a2fcc7`](https://github.com/martialonline/workflow-status/commit/3a2fcc797e10ff3807913f982c7eb68b9568075a) |
 | v3 | [`v3`](https://github.com/chainguard-actions/martialonline-workflow-status/tree/v3) | — |
 | v4 | [`v4`](https://github.com/chainguard-actions/martialonline-workflow-status/tree/v4) | — |
 | v4.1 | [`v4.1`](https://github.com/chainguard-actions/martialonline-workflow-status/tree/v4.1) | — |
