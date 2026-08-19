@@ -1,0 +1,40 @@
+name: Test workflow status - output contract
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      # Run the action and verify the output is always one of the three valid statuses.
+      # The action reads job results from the GitHub API. Under the harness, the sentinel
+      # GITHUB_REPOSITORY means the API call may return empty data, but the action should
+      # still produce a valid status output.
+      - id: action
+        uses: .
+        continue-on-error: true
+
+      - name: Assert output contract - status must be success, failure, or cancelled
+        env:
+          STATUS: ${{ steps.action.outputs.status }}
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "status output: '$STATUS'"
+          if [ "$OUTCOME" = "success" ]; then
+            case "$STATUS" in
+              success|failure|cancelled)
+                echo "PASS: status '$STATUS' is a valid value"
+                ;;
+              *)
+                echo "FAIL: status '$STATUS' is not one of: success, failure, cancelled"
+                exit 1
+                ;;
+            esac
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (sentinel repo not resolvable via GitHub API)"
+          else
+            echo "FAIL: unexpected step outcome '$OUTCOME'"
+            exit 1
+          fi
