@@ -12,7 +12,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | v3 | [`v3`](https://github.com/chainguard-actions/martialonline-workflow-status/tree/v3) | [`616a964`](https://github.com/martialonline/workflow-status/commit/616a9642a17fa15d9b0c5b4483b82244f74446d6) |
 | v4 | [`v4`](https://github.com/chainguard-actions/martialonline-workflow-status/tree/v4) | — |
 | v4.1 | [`v4.1`](https://github.com/chainguard-actions/martialonline-workflow-status/tree/v4.1) | — |
-| v4.2 | [`v4.2`](https://github.com/chainguard-actions/martialonline-workflow-status/tree/v4.2) | — |
+| v4.2 | [`v4.2`](https://github.com/chainguard-actions/martialonline-workflow-status/tree/v4.2) | [`326830c`](https://github.com/martialonline/workflow-status/commit/326830cacf79872efe767e15031f58d1ea0508c4) |
 
 ## Privacy
 
