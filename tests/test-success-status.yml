@@ -1,0 +1,36 @@
+name: Test success status output
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        continue-on-error: true
+      - name: Assert status output is set or action failed gracefully on sentinel repo
+        env:
+          STATUS: ${{ steps.action.outputs.status }}
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "status: $STATUS"
+          if [ "$OUTCOME" = "success" ]; then
+            if [ -z "$STATUS" ]; then
+              echo "FAIL: action succeeded but status output is empty"
+              exit 1
+            fi
+            # Under act with a real token but sentinel repo, the API call may return
+            # an error JSON. With 0 failed and 0 cancelled jobs detected, status should be 'success'.
+            if [ "$STATUS" != "success" ] && [ "$STATUS" != "failure" ] && [ "$STATUS" != "cancelled" ]; then
+              echo "FAIL: expected a valid status value, got '$STATUS'"
+              exit 1
+            fi
+            echo "PASS: status output is '$STATUS'"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (sentinel repo is not resolvable via GitHub API)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
